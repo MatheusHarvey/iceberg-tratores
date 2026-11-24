@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iceberg dos tratores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE work, exibido numa TV em retrato durante reunião: leitura a 3 m
+   IDEA iceberg: inspeção final é a ponta visível, retrabalho fica por baixo d'água
+   PICTURE iceberg em 6 camadas, cada trator na sua camada com a fita de testes da planilha
+   COLOUR céu noturno + mar profundo fixos, gelo branco, tratores vermelho/amarelo, laranja de prioridade
+   TYPE Barlow Condensed 800 + Barlow
+   LAYOUT quadro 9:16 na altura toda: cabeçalho, iceberg (rótulos à esquerda), rodapé com legenda */
+:root{color-scheme:dark;--sky1:#0b1a29;--sky2:#1a4462;--sea1:#0a5b7c;--sea2:#06304d;--sea3:#03131f;--ink:#f3f8fb;--mute:#9fc0d3;--red:#d9282e;--redD:#99181d;--yel:#f3c22c;--yelD:#b38a10;--pri:#ff5a1f;--go:#3ddc84;--ok:#79cc4a;--nok:#e5322d;--ong:#ffd400;--wl:23.7%}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;margin:0}
+body{background:var(--sea3);color:var(--ink);font:500 16px/1.3 Barlow,system-ui,sans-serif;overflow:hidden;display:flex;justify-content:center}
+.tv{height:100%;width:min(100vw,56.25vh);container-type:size;display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--sky1)}
+header{padding:1.3cqh 2.4cqh .8cqh;display:grid;gap:.6cqh}
+h1{font:800 3.3cqh/1 "Barlow Condensed",sans-serif;margin:0;letter-spacing:-.01em}
+.sub{font-size:1.4cqh;color:var(--mute);margin-top:.3cqh}
+.kpis{display:flex;flex-wrap:wrap;gap:.4cqh 1.6cqh;align-items:baseline}
+.when{margin-left:auto;font-size:1.2cqh;color:var(--mute);align-self:center}
+.kpi{display:flex;align-items:baseline;gap:.5cqh}
+.kpi b{font:800 2.6cqh/1 "Barlow Condensed",sans-serif}
+.kpi span{font-size:1.35cqh;color:var(--mute)}
+.kpi.r b{color:#ff6b6f}.kpi.y b{color:var(--yel)}.kpi.p b{color:var(--pri)}.kpi.b b{color:#ff8a8d}
+.stage{position:relative;display:grid;background:linear-gradient(var(--sky1) 0%,var(--sky2) var(--wl),var(--sea1) var(--wl),var(--sea2) 70%,var(--sea3) 100%)}
+.wl{position:absolute;left:0;right:0;top:var(--wl);height:1.4cqh;transform:translateY(-50%);pointer-events:none}
+.row{display:grid;grid-template-columns:25% minmax(0,1fr);position:relative}
+.lab{overflow:hidden;padding:0 .6cqh 0 2.4cqh;display:flex;flex-direction:column;justify-content:center;gap:.3cqh;border-bottom:.15cqh solid #ffffff14}
+.lv{font:700 1.3cqh/1 Barlow,sans-serif;color:var(--mute)}
+.nm{font:800 2.15cqh/1.02 "Barlow Condensed",sans-serif}
+.subs{font-size:1.2cqh;color:var(--mute);line-height:1.25}
+.tag{align-self:flex-start;font:700 1.15cqh/1 Barlow,sans-serif;padding:.45cqh .7cqh;border-radius:.6cqh;background:#ffffff1c;color:var(--ink);white-space:nowrap}
+.tag.cap{background:var(--pri);color:#fff}
+.slot{position:relative}
+.ice{position:absolute;inset:.18cqh 0}
+.row.up .ice{background:linear-gradient(100deg,#ffffff 0%,#e4f0f5 55%,#b6d0dc 100%)}
+.row.dn .ice{background:linear-gradient(100deg,#a9e3f2b0 0%,#6fbfd98a 60%,#3f8fb070 100%)}
+.trs{position:relative;height:100%;display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:.5cqh .8cqh;padding:.5cqh 0}
+.empty{font:600 1.3cqh/1 Barlow,sans-serif;color:#5f7f92}
+.t{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:.7cqh;width:20.4cqh;padding:.4cqh .7cqh;border-radius:.8cqh;background:#0b1a29e8;box-shadow:0 .3cqh .8cqh #00000040}
+.t.pri{box-shadow:0 0 0 .25cqh var(--pri),0 .3cqh .8cqh #00000040}
+.t svg{width:3.9cqh;height:auto;display:block;overflow:visible}
+.tx{display:grid;gap:.25cqh}
+.hd{display:flex;align-items:center;gap:.6cqh;flex-wrap:wrap}
+.hd b{font:800 2.1cqh/1 "Barlow Condensed",sans-serif}
+.st{font:700 1.15cqh/1.15 Barlow,sans-serif;color:#fff}
+.st.go::before{content:"";display:inline-block;width:.85cqh;height:.85cqh;border-radius:50%;background:var(--go);margin-right:.4cqh;vertical-align:.05cqh}
+.st.wait{color:#cfe6f1}
+.st.blk{color:#ff8a8d}
+.st.ok{color:var(--ok)}
+.chips{display:flex;flex-wrap:wrap;gap:.3cqh}
+.ch{font:700 1.02cqh/1 Barlow,sans-serif;padding:.28cqh .38cqh;border-radius:.35cqh;background:var(--nok);color:#fff;white-space:nowrap}
+.ch.na{background:#ffffff2a;color:#dfeef5}
+.ch.lbl{background:none;color:var(--mute);padding-left:0}
+.badge{font:700 1cqh/1 Barlow,sans-serif;padding:.25cqh .45cqh;border-radius:.35cqh;background:#2e6f8e;color:#fff;white-space:nowrap}
+.badge.y{background:#6b5410}
+.t.aguardando{background:#0b1a29b8;border:.15cqh dashed #ffffffa0}
+.t.aguardando svg,.t.bloqueado svg{opacity:.5}
+.t.bloqueado{border:.15cqh solid #ff6b6f}
+.bang{position:absolute;top:-1cqh;left:-1cqh;width:2.6cqh;height:2.6cqh;border-radius:50%;background:var(--pri);color:#fff;border:.28cqh solid #fff;display:grid;place-items:center;font:800 1.9cqh/1 "Barlow Condensed",sans-serif;animation:pulse 1.8s ease-out infinite}
+.lock{position:absolute;top:-1cqh;left:-1cqh;width:2.4cqh;height:2.4cqh;border-radius:50%;background:#5a0d10;border:.25cqh solid #ff6b6f;display:grid;place-items:center}
+.lock svg{width:1.3cqh}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #ff5a1fb0}100%{box-shadow:0 0 0 1.4cqh #ff5a1f00}}
+@media (prefers-reduced-motion:reduce){.bang{animation:none}}
+.expl{font-size:1.2cqh;color:var(--ink)}
+footer{padding:.9cqh 2.4cqh 1.1cqh;background:var(--sea3);display:grid;gap:.5cqh;border-top:.15cqh solid #ffffff1a}
+.key{display:flex;align-items:flex-end;gap:1.4cqh}
+.key h2{font:800 1.7cqh/1.1 "Barlow Condensed",sans-serif;margin:0;flex:none;width:9cqh}
+.kstrip{display:flex;gap:.7cqh;flex-wrap:wrap}
+.kg{display:grid;gap:.3cqh;justify-items:start}
+.kg span{font-size:1.05cqh;color:var(--mute);white-space:nowrap}
+.kg .row2{display:flex;gap:.15cqh}
+.kg .pp{width:.9cqh;height:1.5cqh}
+.kg small{font:700 1cqh/1.1 Barlow,sans-serif;color:var(--ink);display:block;max-width:12cqh}
+.leg{display:flex;flex-wrap:wrap;gap:.5cqh 1.5cqh;font-size:1.15cqh;color:var(--mute)}
+.leg span{display:inline-flex;align-items:center;gap:.5cqh;white-space:nowrap}
+.sw{width:1.3cqh;height:1.3cqh;border-radius:.3cqh;display:inline-block}
+.mini{width:1.8cqh;height:1.8cqh;border-radius:50%;background:var(--pri);color:#fff;font:800 1.2cqh/1.6cqh "Barlow Condensed";text-align:center;border:.18cqh solid #fff}
+.top{display:flex;align-items:center;justify-content:space-between;gap:1cqh}
+.mode{font:700 1.3cqh/1 Barlow,sans-serif;color:var(--mute);margin-top:.4cqh}
+.mode b{color:var(--ink)}
+#go{font:800 1.7cqh/1 "Barlow Condensed",sans-serif;color:#0b1a29;background:var(--ong);border:0;border-radius:.8cqh;padding:1cqh 1.5cqh;cursor:pointer;white-space:nowrap;box-shadow:0 .3cqh 0 #a88a00;min-height:44px}
+#go:hover{filter:brightness(1.08)}
+#go:focus-visible{outline:.3cqh solid #fff;outline-offset:.3cqh}
+#go:disabled{opacity:.6;cursor:default}
+#go.back{background:#ffffff22;color:#fff;box-shadow:none}
+.st.sleep{color:#cbbcff}
+.st.sleep::before{content:"";display:inline-block;width:.95cqh;height:.95cqh;border-radius:50%;box-shadow:inset -.28cqh -.05cqh 0 0 #cbbcff;margin-right:.4cqh;vertical-align:.02cqh;transform:rotate(-20deg)}
+.t.dorme{border:.15cqh solid #8f7cf0}
+.badge.nx{background:var(--ong);color:#0b1a29}
+.badge.dn{background:#4a3b2c;color:#f0dcc4}
+.badge.mv{background:#fff;color:#0b1a29}
+.t.fly{z-index:5}
+.moon{width:1.3cqh;height:1.3cqh;border-radius:50%;box-shadow:inset -.35cqh -.05cqh 0 0 #cbbcff;display:inline-block;transform:rotate(-20deg)}
+</style>
+</head>
+<body>
+<div class="tv">
+  <header>
+    <div class="top">
+      <div>
+        <h1>Tratores no fluxo</h1>
+        <div class="mode" id="mode"></div>
+      </div>
+      <button id="go" type="button"></button>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </header>
+  <main class="stage" id="stage"></main>
+  <footer>
+    <div class="expl">Etiquetas vermelhas: testes ainda NOK até o nível em que o trator está.</div>
+    <div class="leg">
+      <span><i class="ch">Farol</i>falta</span>
+      <span><i class="sw" style="background:var(--go);border-radius:50%"></i>em andamento</span>
+      <span><i class="sw" style="border:.15cqh dashed #fff"></i>aguardando</span>
+      <span><i class="moon"></i>dorme no posto</span>
+      <span><i class="mini">!</i>prioridade</span>
+    </div>
+  </footer>
+</div>
+<script>
+{
+/* ===== EDITE AQUI =====================================================================
+   n: 2 últimos dígitos do monobloco · c: "r" Massey (vermelho) | "y" Valtra (amarelo) · lv: nível 1–6
+   st: "andamento" | "aguardando" | "bloqueado" | "" · p: prioridade · tag: selo curto
+   f: fita da planilha (aba Estágio), 12 letras na ordem das colunas C→N:
+      O = OK · N = NOK · G = ONGOING · - = não se aplica · _ = em branco            */
+const TRATORES = [
+  {n:"70", c:"r", lv:6, st:"andamento",  p:true, f:"OOOOOOOOOOOG"},
+  {n:"84", c:"r", lv:5, st:"andamento",  p:true, f:"OOOOOOOOOOGN"},
+  {n:"63", c:"r", lv:4, st:"aguardando",         f:"OOONOOOOONNN"},
+  {n:"51", c:"r", lv:3, st:"andamento",          f:"OOONNNNOGNNN"},
+  {n:"74", c:"r", lv:2, st:"", foco:"2º foco",   f:"OOOOOONONNNN"},
+  {n:"72", c:"r", lv:2, st:"", foco:"2º foco",   f:"OOOONONNNNNN"},
+  {n:"73", c:"r", lv:2, st:"", foco:"3º foco",   f:"OOONNOONNNNN"},
+  {n:"50", c:"r", lv:2, st:"",                   f:"OOONNOONNNNN"},
+  {n:"69", c:"r", lv:2, st:"",                   f:"OOONNOONNNNN"},
+  {n:"71", c:"r", lv:2, st:"",                   f:"OOONNOONNNNN"},
+  {n:"79", c:"r", lv:2, st:"", doa:true,         f:"OOONNONNNNNN"},
+  {n:"77", c:"r", lv:2, st:"bloqueado", doa:true, f:"OOONNONNNNNN", tag:"porta 9BOX"},
+  {n:"17", c:"y", lv:1, st:"", tag:"P série M1-23V", f:"NO_OO-NO-NNN"},
+  {n:"24", c:"y", lv:1, st:"", tag:"P série M1-23V", f:"NO_OO-NO-NNN"},
+  {n:"33", c:"y", lv:1, st:"", tag:"P série M1-23V", f:"NO_OO-NO-NNN"}
+];
+/* ETAPAS do botão. Cada etapa traz só o que muda em relação à anterior; "ordem" = sequência da animação.
+   st "dorme" = termina o dia parado nesse posto (o teste do posto fica como ONGOING "G") */
+const ETAPAS = [
+  {titulo:"Situação de hoje, 24/11", nota:"pátio na base, inspeção final no topo", botao:"▶ Ver meta 24/11", mud:{}},
+  {titulo:"Meta para o fim do dia 24/11", botao:"▶ Ver previsto 25/11", mud:{
+    "84": {ordem:1, lv:6, st:"dorme", f:"OOOOOOOOOOOG"},
+    "63": {ordem:2, lv:5, st:"dorme", f:"OOONOOOOOOGN"},
+    "51": {ordem:3, lv:4, st:"dorme", f:"OOONNNNOOGNN"},
+    "72": {ordem:4, lv:3, st:"dorme", foco:null, f:"OOOONOOGGNNN"},
+    "74": {ordem:5, prox:"próxima no exp."}
+  }},
+  {titulo:"Previsto para 25/11", botao:"↺ Voltar para hoje", mud:{
+    "72": {ordem:1, lv:4, st:"aguardando", f:"OOOONOOOONNN"},
+    "74": {ordem:2, lv:3, st:"dorme", foco:null, prox:null, f:"OOOOOONOGNNN"},
+    "73": {ordem:3, prox:"próxima no exp."}
+  }}
+];
+const NIVEIS = {
+  6:{nm:"Correção inspeção final", subs:[], h:1.05},
+  5:{nm:"Inspeção final", subs:[], h:.5},
+  4:{nm:"Retorno", subs:["Validação hídrico"], h:1.05},
+  3:{nm:"Retrabalho experimental", subs:["Rolete do capô","Reparo hídrico"], cap:1, h:1.15},
+  2:{nm:"Retrabalho condicional", subs:["Farol","Inversão rodado","Defletor","Pintura"], h:3.7},
+  1:{nm:"Pátio", subs:["Roll test","Keeper","Correções Keeper"], h:2}
+};
+/* nome e nível de cada coluna da planilha (C→N) */
+const COLS = [["Roll test",1],["Keeper",1],["Corr. Keeper",1],["Farol",2],["Rodado",2],["Defletor",2],["Pintura",2],["Rolete capô",3],["Eng. exp",3],["Validação hídrico",4],["Inspeção final",5],["Correção IF",6]];
+/* ===================================================================================== */
+
+const esc = s => String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const COR = {r:["var(--red)","var(--redD)"], y:["var(--yel)","var(--yelD)"]};
+const CLS = {O:"O", N:"N", G:"G", "-":"X", _:""};
+
+const tractorSVG = c => {
+  const [m, d] = COR[c];
+  return `<svg viewBox="0 0 120 86" aria-hidden="true">
+    <ellipse cx="62" cy="82" rx="54" ry="4" fill="#00000040"/>
+    <rect x="88" y="16" width="5" height="20" rx="1.5" fill="#2a2d31"/>
+    <path d="M44 34H104Q111 34 111 41V58H44Z" fill="${m}"/>
+    <rect x="106" y="40" width="5" height="15" fill="${d}"/>
+    <path d="M46 47H108" stroke="${d}" stroke-width="2.5"/>
+    <path d="M20 12H56L59 46H17Z" fill="${m}"/>
+    <rect x="14" y="6" width="48" height="7" rx="2" fill="${d}"/>
+    <path d="M26 17H51L53 38H24Z" fill="#cdeaf5" opacity=".9"/>
+    <path d="M10 56A27 27 0 0 1 64 56Z" fill="${d}"/>
+    <circle cx="37" cy="60" r="23" fill="#1c1f23"/>
+    <circle cx="37" cy="60" r="11" fill="${m}"/><circle cx="37" cy="60" r="4" fill="#2a2d31"/>
+    <circle cx="97" cy="68" r="14" fill="#1c1f23"/>
+    <circle cx="97" cy="68" r="6.5" fill="${m}"/><circle cx="97" cy="68" r="2.5" fill="#2a2d31"/>
+  </svg>`;
+};
+
+const LOCK = `<svg viewBox="0 0 12 14"><rect x="1" y="6" width="10" height="7.5" rx="1.5" fill="#fff"/><path d="M3.3 6V4.2a2.7 2.7 0 0 1 5.4 0V6" stroke="#fff" stroke-width="1.6" fill="none"/></svg>`;
+
+const ler = t => {
+  const f = t.f || "";
+  const emCurso = COLS.filter((c, i) => f[i] === "G").map(c => c[0]);
+  const nok = COLS.map((c, i) => ({n: c[0], lv: c[1], v: f[i]})).filter(c => c.v === "N" && c.lv <= t.lv);
+  const espera = t.st === "aguardando" ? (nok.find(c => c.lv === t.lv) || null) : null;
+  return {emCurso, espera: espera && espera.n, falta: nok.filter(c => c !== espera).map(c => c.n)};
+};
+
+const linhaStatus = (t, r) => {
+  if (t.st === "bloqueado") return `<span class="st blk">Bloqueado${t.tag ? " · " + esc(t.tag) : ""}</span>`;
+  if (t.st === "andamento") return `<span class="st go">${esc(r.emCurso.join(", ") || "Em andamento")}</span>`;
+  if (t.st === "dorme") return `<span class="st sleep">Dorme em ${esc(r.emCurso.join(", ") || "posto")}</span>`;
+  if (t.st === "aguardando") return `<span class="st wait">Aguardando ${esc(r.espera || "vaga")}</span>`;
+  return "";
+};
+
+const card = t => {
+  const r = ler(t);
+  const b = [];
+  if (t.mv) b.push(`<span class="badge mv">${t.mv < t.lv ? "↑" : "↓"} veio do nível ${t.mv}</span>`);
+  if (t.prox) b.push(`<span class="badge nx">${esc(t.prox)}</span>`);
+  if (t.foco) b.push(`<span class="badge">${esc(t.foco)}</span>`);
+  if (t.doa) b.push('<span class="badge dn">doadora de peças</span>');
+  if (t.tag && t.st !== "bloqueado") b.push(`<span class="badge ${t.c === "y" ? "y" : ""}">${esc(t.tag)}</span>`);
+  const chips = r.falta.length
+    ? `<div class="chips">${r.falta.map(n => `<span class="ch">${esc(n)}</span>`).join("")}</div>`
+    : `<span class="st ok">Nada pendente abaixo</span>`;
+  return `<div class="t ${esc(t.st || "")} ${t.p ? "pri" : ""}" data-id="${esc(t.n)}">
+    ${tractorSVG(t.c)}
+    <div class="tx">
+      <div class="hd"><b>${esc(t.n)}</b>${b.join("")}</div>
+      ${linhaStatus(t, r)}
+      ${chips}
+    </div>
+    ${t.p ? '<span class="bang" title="Prioridade">!</span>' : ""}
+    ${t.st === "bloqueado" ? `<span class="lock">${LOCK}</span>` : ""}
+  </div>`;
+};
+
+const peso = t => (t.p ? 0 : t.prox ? 1 : t.foco ? 2 : t.doa ? 7 : t.st === "andamento" || t.st === "dorme" ? 3 : t.st === "" ? 4 : t.st === "aguardando" ? 5 : 6);
+
+const dados = k => {
+  let lista = TRATORES.map(t => Object.assign({}, t, {mv: null}));
+  for (let e = 1; e <= k; e++) {
+    lista = lista.map(t => {
+      const m = ETAPAS[e].mud[t.n];
+      const o = Object.assign({}, t, {mv: null});
+      if (!m) return o;
+      Object.assign(o, m);
+      if (m.lv && m.lv !== t.lv) o.mv = t.lv;
+      return o;
+    });
+  }
+  return lista;
+};
+
+/* contorno do iceberg: largura (% da coluna) em cada fronteira, do topo do nível 6 à base do nível 1 */
+const W = [46, 60, 70, 88, 97, 99, 88];
+let seed;
+const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+const poly = i => {
+  const L = [], R = [];
+  for (let k = 0; k <= 4; k++) {
+    const w = W[i] + (W[i + 1] - W[i]) * k / 4;
+    const j1 = (k === 0 || k === 4) ? 0 : (rnd() - .5) * 5;
+    const j2 = (k === 0 || k === 4) ? 0 : (rnd() - .5) * 5;
+    L.push(`${(50 - w / 2 + j1).toFixed(1)}% ${k * 25}%`);
+    R.push(`${(50 + w / 2 + j2).toFixed(1)}% ${k * 25}%`);
+  }
+  return `polygon(${R.join(",")},${L.reverse().join(",")})`;
+};
+
+const ordem = [6, 5, 4, 3, 2, 1];
+const stage = document.getElementById("stage");
+const tv = document.querySelector(".tv");
+stage.style.gridTemplateRows = ordem.map(lv => `${NIVEIS[lv].h}fr`).join(" ");
+const WAVE = `<svg class="wl" viewBox="0 0 400 14" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 7 Q10 2 20 7 T40 7 T60 7 T80 7 T100 7 T120 7 T140 7 T160 7 T180 7 T200 7 T220 7 T240 7 T260 7 T280 7 T300 7 T320 7 T340 7 T360 7 T380 7 T400 7" fill="none" stroke="#bfe9f7" stroke-width="2" vector-effect="non-scaling-stroke" opacity=".8"/></svg>`;
+
+const setWL = () => { const rows = stage.querySelectorAll(".row"); if (rows.length < 3) return;
+  tv.style.setProperty("--wl", (rows[2].offsetTop / stage.clientHeight * 100).toFixed(2) + "%"); };
+
+let modo = 0;
+const render = () => {
+  seed = 11;
+  const lista = dados(modo);
+  stage.innerHTML = ordem.map((lv, i) => {
+    const N = NIVEIS[lv];
+    const aqui = lista.filter(t => t.lv === lv).sort((a, b) => peso(a) - peso(b));
+    const ocup = aqui.filter(t => t.st === "andamento" || t.st === "dorme").length;
+    const tag = N.cap
+      ? `<span class="tag ${ocup >= N.cap ? "cap" : ""}">1 por vez · ${ocup}/${N.cap}</span>`
+      : aqui.length ? `<span class="tag">${aqui.length} ${aqui.length > 1 ? "tratores" : "trator"}</span>` : "";
+    return `<section class="row ${i < 2 ? "up" : "dn"}">
+      <div class="lab">
+        <span class="lv">Nível ${lv}</span>
+        <span class="nm">${esc(N.nm)}</span>
+        ${N.subs.length ? `<span class="subs">${N.subs.map(esc).join(" · ")}</span>` : ""}
+        ${tag}
+      </div>
+      <div class="slot">
+        <div class="ice" style="clip-path:${poly(i)}"></div>
+        <div class="trs">${aqui.length ? aqui.map(card).join("") : '<span class="empty">sem tratores</span>'}</div>
+      </div>
+    </section>`;
+  }).join("") + WAVE;
+  setWL();
+  const nP = lista.filter(t => t.p).length, nB = lista.filter(t => t.st === "bloqueado").length;
+  const nR = lista.filter(t => t.c === "r").length, nY = lista.filter(t => t.c === "y").length;
+  const k = [["", lista.length, "tratores"], ["r", nR, "Massey"], ["y", nY, "Valtra"], ["p", nP, "prioridades"], ["b", nB, "bloqueado"]];
+  document.getElementById("kpis").innerHTML = k.map(([c, v, l]) => `<div class="kpi ${c}"><b>${v}</b><span>${l}</span></div>`).join("");
+  const E = ETAPAS[modo], nMov = Object.keys(E.mud).length;
+  document.getElementById("mode").innerHTML = `<b>${esc(E.titulo)}</b> · ${modo ? `${nMov} movimentos · etapa ${modo} de ${ETAPAS.length - 1}` : esc(E.nota)}`;
+  const go = document.getElementById("go");
+  go.textContent = E.botao;
+  go.classList.toggle("back", modo === ETAPAS.length - 1);
+};
+const roWL = new ResizeObserver(setWL); roWL.observe(stage);
+
+const calmo = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let ocupado = false;
+const trocar = alvo => {
+  if (ocupado || alvo === modo) return;
+  const antes = {};
+  stage.querySelectorAll(".t").forEach(el => { antes[el.dataset.id] = el.getBoundingClientRect(); });
+  const frente = alvo === modo + 1;
+  modo = alvo;
+  render();
+  if (calmo) return;
+  ocupado = true;
+  const go = document.getElementById("go"); go.disabled = true;
+  const passo = 1100;
+  let fim = 0;
+  stage.querySelectorAll(".t").forEach(el => {
+    const a = antes[el.dataset.id]; if (!a) return;
+    const d = el.getBoundingClientRect();
+    const dx = a.left - d.left, dy = a.top - d.top;
+    if (Math.abs(dx) + Math.abs(dy) < 2) return;
+    const m = frente ? ETAPAS[alvo].mud[el.dataset.id] : null;
+    const principal = m && m.lv;
+    const delay = principal ? (m.ordem - 1) * passo : 0;
+    const dur = principal ? 1300 : 700;
+    fim = Math.max(fim, delay + dur);
+    el.classList.add("fly");
+    const anim = el.animate([
+      {transform: `translate(${dx}px,${dy}px)`},
+      {transform: `translate(${dx * .5}px,${dy * .5}px) scale(${principal ? 1.12 : 1})`, offset: .5},
+      {transform: "none"}
+    ], {duration: dur, delay, easing: "cubic-bezier(.45,0,.2,1)", fill: "backwards"});
+    anim.onfinish = () => el.classList.remove("fly");
+  });
+  if (frente) { const nm = Object.values(ETAPAS[alvo].mud).filter(m => m.lv).length;
+    stage.querySelectorAll(".badge.nx").forEach(el => el.animate([{opacity: 0, transform: "scale(.6)"}, {opacity: 1, transform: "none"}], {duration: 500, delay: nm * passo, fill: "backwards"})); }
+  setTimeout(() => { ocupado = false; go.disabled = false; }, fim + 50);
+};
+
+const ultimo = ETAPAS.length - 1;
+document.getElementById("go").addEventListener("click", () => trocar(modo === ultimo ? 0 : modo + 1));
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); if (modo < ultimo) trocar(modo + 1); }
+  if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); if (modo > 0) trocar(modo - 1); }
+});
+render();
+}
+</script>
+</body>
+</html>
