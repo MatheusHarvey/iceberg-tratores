@@ -68,7 +68,7 @@ h1{font:800 3.3cqh/1 "Barlow Condensed",sans-serif;margin:0;letter-spacing:-.01e
 @keyframes pulse{0%{box-shadow:0 0 0 0 #ff5a1fb0}100%{box-shadow:0 0 0 1.4cqh #ff5a1f00}}
 @media (prefers-reduced-motion:reduce){.bang{animation:none}}
 .expl{font-size:1.2cqh;color:var(--ink)}
-footer{padding:.9cqh 2.4cqh 1.1cqh;background:var(--sea3);display:grid;gap:.5cqh;border-top:.15cqh solid #ffffff1a}
+footer{padding:.9cqh 2.4cqh 1.1cqh 12.4cqh;background:var(--sea3);display:grid;gap:.5cqh;border-top:.15cqh solid #ffffff1a}
 .key{display:flex;align-items:flex-end;gap:1.4cqh}
 .key h2{font:800 1.7cqh/1.1 "Barlow Condensed",sans-serif;margin:0;flex:none;width:9cqh}
 .kstrip{display:flex;gap:.7cqh;flex-wrap:wrap}
@@ -97,6 +97,10 @@ footer{padding:.9cqh 2.4cqh 1.1cqh;background:var(--sea3);display:grid;gap:.5cqh
 .badge.mv{background:#fff;color:#0b1a29}
 .t.fly{z-index:5}
 .moon{width:1.3cqh;height:1.3cqh;border-radius:50%;box-shadow:inset -.35cqh -.05cqh 0 0 #cbbcff;display:inline-block;transform:rotate(-20deg)}
+.tv{position:relative}
+.boneco{position:absolute;z-index:30;width:4.4cqh;height:8.8cqh;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 .3cqh .3cqh #0008)}
+.boneco svg{width:100%;height:100%;display:block;overflow:visible;pointer-events:none}
+.boneco.arrastando{cursor:grabbing;transform:scale(1.15);filter:drop-shadow(0 .8cqh .6cqh #000a)}
 </style>
 </head>
 <body>
@@ -122,6 +126,28 @@ footer{padding:.9cqh 2.4cqh 1.1cqh;background:var(--sea3);display:grid;gap:.5cqh
       <span><i class="mini">!</i>prioridade</span>
     </div>
   </footer>
+  <div class="boneco" id="bon-verde" title="Arraste">
+    <svg viewBox="0 0 40 80" aria-hidden="true">
+      <g stroke-linecap="round" fill="none">
+        <g stroke="#0b1a29" stroke-width="6"><circle cx="20" cy="13" r="7"/><path d="M20 20V48M20 27L8 41M20 27L32 41M20 48L10 73M20 48L30 73"/></g>
+        <g stroke="#fff" stroke-width="3"><circle cx="20" cy="13" r="7" fill="#0b1a29"/><path d="M20 20V48M20 27L8 41M20 27L32 41M20 48L10 73M20 48L30 73"/></g>
+      </g>
+      <path d="M12 11Q12 3 20 3Q28 3 28 11Z" fill="#2fbf4a" stroke="#0b1a29" stroke-width="1.2"/>
+      <path d="M26 9.5H36Q37 11.5 35 12H26Z" fill="#1f8f35" stroke="#0b1a29" stroke-width="1.2"/>
+    </svg>
+  </div>
+  <div class="boneco" id="bon-vermelho" title="Arraste">
+    <svg viewBox="0 0 40 80" aria-hidden="true">
+      <g stroke-linecap="round" fill="none">
+        <g stroke="#0b1a29" stroke-width="6"><circle cx="20" cy="13" r="7"/><path d="M20 20V48M20 27L8 41M20 27L32 41M20 48L10 73M20 48L30 73"/></g>
+        <g stroke="#fff" stroke-width="3"><circle cx="20" cy="13" r="7" fill="#0b1a29"/><path d="M20 20V48M20 27L8 41M20 27L32 41M20 48L10 73M20 48L30 73"/></g>
+      </g>
+      <path d="M11 12Q11 1 20 1Q29 1 29 12" fill="none" stroke="#0b1a29" stroke-width="4.5"/>
+      <path d="M11 12Q11 1 20 1Q29 1 29 12" fill="none" stroke="#e0262b" stroke-width="2.6"/>
+      <rect x="7.5" y="8" width="6" height="10" rx="3" fill="#e0262b" stroke="#0b1a29" stroke-width="1.2"/>
+      <rect x="26.5" y="8" width="6" height="10" rx="3" fill="#e0262b" stroke="#0b1a29" stroke-width="1.2"/>
+    </svg>
+  </div>
 </div>
 <script>
 {
@@ -366,6 +392,44 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); if (modo > 0) trocar(modo - 1); }
 });
 render();
+
+/* bonecos arrastáveis: posição guardada em % do quadro, ficam onde forem soltos */
+const tvBox = document.querySelector(".tv");
+const bonecos = [["bon-verde", 1.2], ["bon-vermelho", 6.4]];
+const posicionarInicio = () => {
+  const r = tvBox.getBoundingClientRect(), u = r.height / 100;
+  bonecos.forEach(([id, x]) => {
+    const el = document.getElementById(id);
+    if (el.dataset.movido) return;
+    el.style.left = (x * u / r.width * 100) + "%";
+    el.style.top = ((r.height - 9.4 * u) / r.height * 100) + "%";
+  });
+};
+bonecos.forEach(([id]) => {
+  const el = document.getElementById(id);
+  let dx = 0, dy = 0;
+  el.addEventListener("pointerdown", e => {
+    e.preventDefault();
+    const b = el.getBoundingClientRect();
+    dx = e.clientX - b.left; dy = e.clientY - b.top;
+    el.setPointerCapture(e.pointerId);
+    el.classList.add("arrastando");
+    bonecos.forEach(([o]) => { document.getElementById(o).style.zIndex = 30; }); el.style.zIndex = 31;
+  });
+  el.addEventListener("pointermove", e => {
+    if (!el.hasPointerCapture(e.pointerId)) return;
+    const r = tvBox.getBoundingClientRect();
+    const x = Math.min(Math.max(e.clientX - dx - r.left, 0), r.width - el.offsetWidth);
+    const y = Math.min(Math.max(e.clientY - dy - r.top, 0), r.height - el.offsetHeight);
+    el.style.left = (x / r.width * 100) + "%";
+    el.style.top = (y / r.height * 100) + "%";
+    el.dataset.movido = "1";
+  });
+  const soltar = e => { if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId); el.classList.remove("arrastando"); };
+  el.addEventListener("pointerup", soltar);
+  el.addEventListener("pointercancel", soltar);
+});
+const roBon = new ResizeObserver(posicionarInicio); roBon.observe(tvBox);
 }
 </script>
 </body>
