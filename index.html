@@ -143,9 +143,9 @@ const TRATORES = [
   {n:"71", c:"r", lv:2, st:"",                   f:"OOONNOONNNNN"},
   {n:"79", c:"r", lv:2, st:"", doa:true,         f:"OOONNONNNNNN"},
   {n:"77", c:"r", lv:2, st:"bloqueado", doa:true, f:"OOONNONNNNNN", tag:"porta 9BOX"},
-  {n:"17", c:"y", lv:1, st:"", tag:"P série M1-23V", f:"NO_OO-NO-NNN"},
+  {n:"17", c:"y", lv:1, st:"", tag:"P série M1-23V", tag2:"verif. direção", f:"NO_OO-NO-NNN"},
   {n:"24", c:"y", lv:1, st:"", tag:"P série M1-23V", f:"NO_OO-NO-NNN"},
-  {n:"33", c:"y", lv:1, st:"", tag:"P série M1-23V", f:"NO_OO-NO-NNN"}
+  {n:"33", c:"y", lv:1, st:"", tag:"P série M1-23V", tag2:"verif. direção", f:"NO_OO-NO-NNN"}
 ];
 /* ETAPAS do botão. Cada etapa traz só o que muda em relação à anterior; "ordem" = sequência da animação.
    st "dorme" = termina o dia parado nesse posto (o teste do posto fica como ONGOING "G") */
@@ -155,13 +155,14 @@ const ETAPAS = [
     "84": {ordem:1, lv:6, st:"dorme", f:"OOOOOOOOOOOG"},
     "63": {ordem:2, lv:5, st:"dorme", f:"OOONOOOOOOGN"},
     "51": {ordem:3, lv:4, st:"dorme", f:"OOONNNNOOGNN"},
-    "72": {ordem:4, lv:3, st:"dorme", foco:null, f:"OOOONOOGGNNN"},
-    "74": {ordem:5, prox:"próxima no exp."}
+    "73": {ordem:4, lv:3, st:"dorme", foco:null, f:"OOONNOOGGNNN"},
+    "24": {ordem:5, prox:"próxima no exp."}
   }},
   {titulo:"Previsto para 25/11", botao:"↺ Voltar para hoje", mud:{
-    "72": {ordem:1, lv:4, st:"aguardando", f:"OOOONOOOONNN"},
-    "74": {ordem:2, lv:3, st:"dorme", foco:null, prox:null, f:"OOOOOONOGNNN"},
-    "73": {ordem:3, prox:"próxima no exp."}
+    "73": {ordem:1, lv:4, st:"aguardando", f:"OOONNOOOONNN"},
+    "24": {ordem:2, lv:3, st:"dorme", prox:null, f:"NO_OO-NOGNNN"},
+    "17": {ordem:3, prox:"foco em seguida"},
+    "33": {ordem:4, prox:"foco em seguida"}
   }}
 ];
 const NIVEIS = {
@@ -225,6 +226,7 @@ const card = t => {
   if (t.foco) b.push(`<span class="badge">${esc(t.foco)}</span>`);
   if (t.doa) b.push('<span class="badge dn">doadora de peças</span>');
   if (t.tag && t.st !== "bloqueado") b.push(`<span class="badge ${t.c === "y" ? "y" : ""}">${esc(t.tag)}</span>`);
+  if (t.tag2) b.push(`<span class="badge">${esc(t.tag2)}</span>`);
   const chips = r.falta.length
     ? `<div class="chips">${r.falta.map(n => `<span class="ch">${esc(n)}</span>`).join("")}</div>`
     : `<span class="st ok">Nada pendente abaixo</span>`;
