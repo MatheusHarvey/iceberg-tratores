@@ -139,6 +139,11 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
 .popBox li::before{content:counter(d);font:800 1.5cqh/1 "Barlow Condensed",sans-serif;color:#0b1a29;background:var(--ok);border-radius:.4cqh;text-align:center;padding:.25cqh 0}
 @keyframes popIn{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.pop{animation:none}}
+.row.sky .nm{font-size:1.55cqh;white-space:nowrap}
+.row.dense .trs{gap:.4cqh .5cqh}
+.row.dense .t{width:13.6cqh;grid-template-columns:minmax(0,1fr);padding:.35cqh .55cqh}
+.row.dense .t svg{display:none}
+.row.dense .ch{font-size:.95cqh;padding:.22cqh .3cqh}
 </style>
 </head>
 <body>
@@ -238,7 +243,7 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
    f: fita da planilha (aba Estágio), 12 letras na ordem das colunas C→N:
       O = OK · N = NOK · G = ONGOING · - = não se aplica · _ = em branco            */
 /* data e hora da última atualização (aparece no rodapé) */
-const ULTIMA_ATUALIZACAO = "25/11/2026 · 08:25";
+const ULTIMA_ATUALIZACAO = "26/11/2026 · 07:50";
 /* defeitos encontrados na máquina 70 (abre no clique em "14 defeitos") */
 const DEFEITOS_70 = [
   "Capô com abertura/gap na guarnição",
@@ -278,32 +283,34 @@ const TRATORES = [
    st: "andamento" | "dorme" | "aguardando" | "bloqueado" | "fim" | "" */
 const ETAPAS = [
   {dia:"24/11", rot:"Realizado", titulo:"24/11 · fim do dia", nota:"realizado", mud:{}},
-  {dia:"25/11", rot:"Previsto", base:0, titulo:"25/11 · previsto", mud:{
+  {dia:"26/11", rot:"Hoje", base:0, titulo:"26/11 · hoje", nota:"situação atual", semMv:true, mud:{
     "70": {ordem:1, lv:7, st:"fim", p:false, defeitos:DEFEITOS_70, f:"OOOOOOOOOOOO"},
     "84": {st:"andamento"},
-    "51": {ordem:2, lv:5, st:"candidata", f:"OOONNNNOOO_NO"},
-    "63": {ordem:2, lv:5, st:"candidata", f:"OOONOOOOOO_NO"},
+    "51": {tag:"porta c/ apoio Eng."},
+    "63": {tag:"porta c/ apoio Eng."},
     "73": {ordem:3, lv:4, st:"andamento", f:"OOONNOOOOGNNN"},
     "24": {ordem:4, lv:3, st:"andamento", prox:null, f:"NO_OO-NOGNNN"},
     "17": {ordem:5, prox:"próxima no exp."},
-    "77": {st:"andamento", cadeado:true, tag:null, txt:"Montagem porta 9BOX"}
+    "33": {ordem:6, prox:"depois da 17"},
+    "77": {st:"bloqueado", cadeado:true, txt:null, tag:"validar vedação da porta"}
   }},
-  {dia:"26/11", rot:"Previsto", base:1, titulo:"26/11 · previsto", mud:{
-    "24": {ordem:1, lv:4, st:"aguardando", f:"NO_OO-NOONNNN"},
-    "17": {ordem:2, lv:3, st:"andamento", prox:null, tag2:null, f:"NO_OO-NOGNNN"},
-    "33": {ordem:3, prox:"próxima no exp.", tag2:null},
-    "77": {st:"", cadeado:false, txt:null, tag:null}
+  {dia:"próximo passo", rot:"Previsto", base:1, titulo:"Próximo passo · previsto", mud:{
+    "73": {ordem:1, lv:5, st:"pronta", f:"OOONNOOOOO_NO"},
+    "24": {ordem:2, lv:4, st:"andamento", prox:"passa à frente", f:"NO_OO-NOOGNNN"},
+    "17": {ordem:3, lv:3, st:"andamento", prox:null, tag2:null, f:"NO_OO-NOGNNN"},
+    "33": {ordem:4, prox:"próxima no exp.", tag2:null}
   }},
-  {dia:"26/11", rot:"Plano B", base:1, plano:true, titulo:"26/11 · plano B", nota:"direção do 17 e do 33 não fica pronta a tempo: sobe o 74", mud:{
-    "24": {ordem:1, lv:4, st:"aguardando", f:"NO_OO-NOONNNN"},
-    "74": {ordem:2, lv:3, st:"andamento", foco:null, f:"OOOOOONOGNNN"},
-    "72": {ordem:3, prox:"próxima no exp."},
+  {dia:"próximo passo", rot:"Plano B", base:1, plano:true, titulo:"Próximo passo · plano B", nota:"direção do 17 e do 33 não fica pronta a tempo: sobe o 74", mud:{
+    "73": {ordem:1, lv:5, st:"pronta", f:"OOONNOOOOO_NO"},
+    "24": {ordem:2, lv:4, st:"andamento", prox:"passa à frente", f:"NO_OO-NOOGNNN"},
+    "74": {ordem:3, lv:3, st:"andamento", foco:null, f:"OOOOOONOGNNN"},
+    "72": {ordem:4, prox:"próxima no exp."},
     "17": {prox:null},
-    "77": {st:"", cadeado:false, txt:null, tag:null}
+    "33": {prox:null}
   }}
 ];
 const NIVEIS = {
-  7:{nm:"Finalizado", subs:[], h:.5},
+  7:{nm:"Em finalização", subs:[], h:.5},
   6:{nm:"Correção inspeção final", subs:[], h:1.05},
   5:{nm:"Pronta p/ inspeção final", subs:["Inspeção: 1 por vez · ~½ dia"], h:.5},
   4:{nm:"Retorno", subs:["Validação hídrico"], h:1.05},
@@ -350,11 +357,12 @@ const ler = t => {
 
 const linhaStatus = (t, r) => {
   if (t.st === "bloqueado") return `<span class="st blk">Bloqueado${t.tag ? " · " + esc(t.tag) : ""}</span>`;
-  if (t.st === "fim") return `<span class="st ok">✓ Finalizado${t.defeitos ? ` · <button type="button" class="defbtn" data-n="${esc(t.n)}">${t.defeitos.length} defeitos</button>` : ""}</span>`;
+  if (t.st === "fim") return `<span class="st ok">Em finalização${t.defeitos ? ` · <button type="button" class="defbtn" data-n="${esc(t.n)}">${t.defeitos.length} defeitos</button>` : ""}</span>`;
+  if (t.st === "pronta") return `<span class="st ok">✓ Pronta p/ inspeção final</span>`;
   if (t.st === "candidata") return `<span class="st cand">Sobe quem fechar porta + hídrico</span>`;
   if (t.st === "andamento") return `<span class="st go">${esc(t.txt || r.emCurso.join(", ") || "Em andamento")}</span>`;
   if (t.st === "dorme") return `<span class="st sleep">Dorme em ${esc(r.emCurso.join(", ") || "posto")}</span>`;
-  if (t.st === "aguardando") return `<span class="st wait">Aguardando ${esc(r.espera || "vaga")}</span>`;
+  if (t.st === "aguardando") return `<span class="st wait">Aguardando ${esc((r.espera || "vaga").replace("Validação hídrico", "hídrico"))}</span>`;
   return "";
 };
 
@@ -386,12 +394,12 @@ const peso = t => (t.st === "fim" ? -1 : t.p ? 0 : t.st === "candidata" ? 1 : t.
 
 const dados = k => {
   if (k === 0) return TRATORES.map(t => Object.assign({}, t, {mv: null}));
-  const prev = dados(ETAPAS[k].base), mud = ETAPAS[k].mud;
+  const prev = dados(ETAPAS[k].base), mud = ETAPAS[k].mud, semMv = ETAPAS[k].semMv;
   return prev.map(t => {
     const o = Object.assign({}, t, {mv: null}), m = mud[t.n];
     if (!m) return o;
     Object.assign(o, m);
-    if (m.lv && m.lv !== t.lv) o.mv = t.lv;
+    if (m.lv && m.lv !== t.lv && !semMv) o.mv = t.lv;
     return o;
   });
 };
@@ -422,9 +430,9 @@ const WAVE = `<svg class="wl" viewBox="0 0 400 14" preserveAspectRatio="none" ar
 const setWL = () => { const rows = stage.querySelectorAll(".row"); if (rows.length < 3) return;
   tv.style.setProperty("--wl", (rows[3].offsetTop / stage.clientHeight * 100).toFixed(2) + "%"); };
 
-let modo = 0;
-/* botão de cima segue o plano principal: 24 → 25 → 26 → volta; o plano B só pela linha do tempo */
-const proxima = k => k === 0 ? 1 : k === 1 ? 2 : 0;
+let modo = 1;
+/* abre em "hoje"; botão de cima: hoje → próximo passo → volta para hoje; 24/11 e plano B pela linha do tempo */
+const proxima = k => k === 1 ? 2 : 1;
 const render = () => {
   seed = 11;
   const lista = dados(modo);
@@ -435,7 +443,7 @@ const render = () => {
     const tag = N.cap
       ? `<span class="tag ${ocup >= N.cap ? "cap" : ""}">1 por vez · ${ocup}/${N.cap}</span>`
       : "";
-    return `<section class="row ${lv === 7 ? "sky" : lv >= 5 ? "up" : "dn"}">
+    return `<section data-lv="${lv}" class="row ${aqui.length >= 3 ? "dense " : ""}${lv === 7 ? "sky" : lv >= 5 ? "up" : "dn"}">
       <div class="lab">
         <span class="lv">Nível ${lv}</span>
         <span class="nm">${esc(N.nm)}</span>
@@ -458,8 +466,8 @@ const render = () => {
   document.getElementById("mode").innerHTML = `<b>${esc(E.titulo)}</b> · ${E.nota ? esc(E.nota) : `${nMov} movimentos`}`;
   const go = document.getElementById("go");
   const prox = proxima(modo);
-  go.textContent = prox === 0 ? "↺ Voltar para 24/11" : `▶ Ver ${ETAPAS[prox].dia}`;
-  go.classList.toggle("back", prox === 0);
+  go.textContent = modo >= 2 ? "↺ Voltar para hoje" : `▶ Ver ${ETAPAS[prox].dia}`;
+  go.classList.toggle("back", modo >= 2);
   document.querySelector(".tv").classList.toggle("planoB", !!E.plano);
   document.querySelectorAll(".tl button").forEach(bt => {
     bt.classList.toggle("on", +bt.dataset.k === modo);
@@ -524,7 +532,7 @@ const fecharPop = () => { pop.hidden = true; };
 stage.addEventListener("click", e => {
   const bt = e.target.closest(".defbtn"); if (!bt) return;
   const t = dados(modo).find(x => x.n === bt.dataset.n); if (!t || !t.defeitos) return;
-  document.getElementById("popT").innerHTML = `Máquina ${esc(t.n)} · ${t.defeitos.length} defeitos sem solução<small>Registrados até a finalização</small>`;
+  document.getElementById("popT").innerHTML = `Máquina ${esc(t.n)} · ${t.defeitos.length} defeitos sem solução<small>Pendentes na finalização</small>`;
   document.getElementById("popL").innerHTML = t.defeitos.map(d => `<li>${esc(d)}</li>`).join("");
   pop.hidden = false; document.getElementById("popX").focus();
 });
