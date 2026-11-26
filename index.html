@@ -391,7 +391,7 @@ const card = t => {
   if (t.tag2) b.push(`<span class="badge">${esc(t.tag2)}</span>`);
   const chips = t.st === "fim" ? "" : r.falta.length
     ? `<div class="chips">${r.falta.map(n => `<span class="ch">${esc(n)}</span>`).join("")}</div>`
-    : `<span class="st ok">Nada pendente abaixo</span>`;
+    : `<span class="st ok">Correções em andamento</span>`;
   return `<div class="t ${esc(t.st || "")} ${t.p ? "pri" : ""}" data-id="${esc(t.n)}">
     ${tractorSVG(t.c)}
     <div class="tx">
