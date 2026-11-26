@@ -141,9 +141,23 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
 @media (prefers-reduced-motion:reduce){.pop{animation:none}}
 .row.sky .nm{font-size:1.55cqh;white-space:nowrap}
 .row.dense .trs{gap:.4cqh .5cqh}
-.row.dense .t{width:13.6cqh;grid-template-columns:minmax(0,1fr);padding:.35cqh .55cqh}
-.row.dense .t svg{display:none}
+.row.dense .t{width:13.6cqh;grid-template-columns:minmax(0,1fr);padding:.35cqh .5cqh}
+.row.dense .t > svg{position:absolute;top:.5cqh;right:.5cqh;width:2.9cqh}
+.row.dense .hd{padding-right:3.2cqh}
+.row.dense .hd b{font-size:1.9cqh}
+.t{cursor:zoom-in}
+.popBox .t{width:100%;cursor:default;transform:none;box-shadow:none;background:#0b1a29}
+.popBox .t svg{width:9cqh}
+.popBox .hd b{font-size:3.4cqh}
+.popBox .st{font-size:1.7cqh}
+.popBox .ch{font-size:1.5cqh;padding:.4cqh .6cqh}
+.popBox .badge{font-size:1.4cqh;padding:.35cqh .6cqh}
+.popBox .tx{gap:.7cqh}
+.popBox .bang,.popBox .lock{display:none}
 .row.dense .ch{font-size:.95cqh;padding:.22cqh .3cqh}
+.popBox li.zoom{display:block;border:0;padding:0}
+.popBox li.zoom::before{display:none}
+.row.dense .lock{left:auto;right:-1cqh;top:-1cqh}
 </style>
 </head>
 <body>
@@ -243,7 +257,7 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
    f: fita da planilha (aba Estágio), 12 letras na ordem das colunas C→N:
       O = OK · N = NOK · G = ONGOING · - = não se aplica · _ = em branco            */
 /* data e hora da última atualização (aparece no rodapé) */
-const ULTIMA_ATUALIZACAO = "26/11/2026 · 07:50";
+const ULTIMA_ATUALIZACAO = "26/11/2026 · 08:00";
 /* defeitos encontrados na máquina 70 (abre no clique em "14 defeitos") */
 const DEFEITOS_70 = [
   "Capô com abertura/gap na guarnição",
@@ -287,12 +301,12 @@ const ETAPAS = [
     "70": {ordem:1, lv:7, st:"fim", p:false, defeitos:DEFEITOS_70, f:"OOOOOOOOOOOO"},
     "84": {st:"andamento"},
     "51": {tag:"ajuste porta"},
-    "63": {tag:"porta c/ apoio Eng."},
+    "63": {tag:"ajuste porta"},
     "73": {ordem:3, lv:4, st:"andamento", f:"OOONNOOOOGNNN"},
     "24": {ordem:4, lv:3, st:"andamento", prox:null, f:"NO_OO-NOGNNN"},
     "17": {ordem:5, prox:"próxima no exp."},
     "33": {ordem:6, prox:"depois da 17"},
-    "77": {st:"bloqueado", cadeado:true, txt:null, tag:"validar vedação da porta"}
+    "77": {st:"bloqueado", cadeado:true, txt:null, tag:"vedação porta"}
   }},
   {dia:"próximo passo", rot:"Previsto", base:1, titulo:"Próximo passo · previsto", mud:{
     "73": {ordem:1, lv:5, st:"pronta", f:"OOONNOOOOO_NO"},
@@ -530,7 +544,15 @@ document.getElementById("tlBtn").addEventListener("click", e => {
 const pop = document.getElementById("pop");
 const fecharPop = () => { pop.hidden = true; };
 stage.addEventListener("click", e => {
-  const bt = e.target.closest(".defbtn"); if (!bt) return;
+  const bt = e.target.closest(".defbtn");
+  if (!bt) {
+    const c = e.target.closest(".t"); if (!c) return;
+    const t = dados(modo).find(x => x.n === c.dataset.id); if (!t) return;
+    document.getElementById("popT").innerHTML = `Máquina ${esc(t.n)}<small>${esc(NIVEIS[t.lv].nm)} · nível ${t.lv}</small>`;
+    document.getElementById("popL").innerHTML = `<li class="zoom">${card(t)}</li>`;
+    pop.hidden = false; document.getElementById("popX").focus();
+    return;
+  }
   const t = dados(modo).find(x => x.n === bt.dataset.n); if (!t || !t.defeitos) return;
   document.getElementById("popT").innerHTML = `Máquina ${esc(t.n)} · ${t.defeitos.length} defeitos sem solução<small>Pendentes na finalização</small>`;
   document.getElementById("popL").innerHTML = t.defeitos.map(d => `<li>${esc(d)}</li>`).join("");
