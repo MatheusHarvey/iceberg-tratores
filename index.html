@@ -32,7 +32,7 @@ h1{font:800 3.3cqh/1 "Barlow Condensed",sans-serif;margin:0;letter-spacing:-.01e
 .row{display:grid;grid-template-columns:25% minmax(0,1fr);position:relative}
 .lab{overflow:hidden;padding:0 .6cqh 0 2.4cqh;display:flex;flex-direction:column;justify-content:center;gap:.3cqh;border-bottom:.15cqh solid #ffffff14}
 .lv{font:700 1.2cqh/1 Barlow,sans-serif;color:var(--mute)}
-.nm{font:800 1.85cqh/1 "Barlow Condensed",sans-serif}
+.nm{font:800 1.6cqh/1 "Barlow Condensed",sans-serif}
 .subs{font-size:1.2cqh;color:var(--mute);line-height:1.25}
 .tag{align-self:flex-start;font:700 1.15cqh/1 Barlow,sans-serif;padding:.45cqh .7cqh;border-radius:.6cqh;background:#ffffff1c;color:var(--ink);white-space:nowrap}
 .tag.cap{background:var(--pri);color:#fff}
@@ -127,20 +127,20 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
 .defbtn:hover,.defbtn:focus-visible{background:#ffffff38;outline:none}
 .pop{position:absolute;inset:0;z-index:40;display:grid;place-items:center;padding:3cqh;background:#03131f8c;-webkit-backdrop-filter:blur(.5cqh);backdrop-filter:blur(.5cqh);animation:popIn .25s ease-out}
 .pop[hidden]{display:none}
-.popBox{width:100%;max-width:50cqh;background:#0b1a29d9;border:.15cqh solid #ffffff40;border-radius:1.2cqh;padding:2cqh 2.2cqh;box-shadow:0 1.5cqh 4cqh #000a}
+.popBox{width:100%;max-width:50cqh;max-height:94cqh;overflow:auto;background:#0b1a29d9;border:.15cqh solid #ffffff40;border-radius:1.2cqh;padding:2cqh 2.2cqh;box-shadow:0 1.5cqh 4cqh #000a}
 .popHd{display:flex;align-items:flex-start;justify-content:space-between;gap:1.5cqh;margin-bottom:1.2cqh}
 .popHd h3{margin:0;font:800 2.6cqh/1.05 "Barlow Condensed",sans-serif}
 .popHd h3 small{display:block;font:600 1.3cqh/1.3 Barlow,sans-serif;color:var(--mute);margin-top:.4cqh}
 .popX{font:700 1.4cqh/1 Barlow,sans-serif;color:#fff;background:#ffffff1f;border:.12cqh solid #ffffff50;border-radius:.6cqh;padding:.8cqh 1.1cqh;cursor:pointer;min-height:36px}
 .popX:hover,.popX:focus-visible{background:#ffffff3a;outline:none}
 .popBox ol{margin:0;padding:0;list-style:none;counter-reset:d;display:grid;gap:.55cqh}
-.popBox li{counter-increment:d;display:grid;grid-template-columns:2.6cqh minmax(0,1fr);gap:.8cqh;align-items:baseline;font-size:1.5cqh;line-height:1.3;padding-bottom:.55cqh;border-bottom:.1cqh solid #ffffff1a}
+.popBox li{display:grid;grid-template-columns:2.6cqh minmax(0,1fr);gap:.8cqh;align-items:baseline;font-size:1.5cqh;line-height:1.3;padding-bottom:.55cqh;border-bottom:.1cqh solid #ffffff1a}
 .popBox li:last-child{border-bottom:0;padding-bottom:0}
-.popBox li::before{content:counter(d);font:800 1.5cqh/1 "Barlow Condensed",sans-serif;color:#0b1a29;background:var(--ok);border-radius:.4cqh;text-align:center;padding:.25cqh 0}
+.popBox li::before{content:attr(data-n);font:800 1.5cqh/1 "Barlow Condensed",sans-serif;color:#0b1a29;background:var(--ok);border-radius:.4cqh;text-align:center;padding:.25cqh 0}
 @keyframes popIn{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){.pop{animation:none}}
 .row.sky .nm{font-size:1.55cqh;white-space:nowrap}
-.row.dense .trs{gap:.4cqh .5cqh}
+.row.dense .trs{gap:.35cqh .5cqh;padding:.25cqh 0}
 .row.dense .t{width:13.6cqh;grid-template-columns:minmax(0,1fr);padding:.35cqh .5cqh}
 .row.dense .t > svg{position:absolute;top:.5cqh;right:.5cqh;width:2.9cqh}
 .row.dense .hd{padding-right:3.2cqh}
@@ -155,8 +155,12 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
 .popBox .tx{gap:.7cqh}
 .popBox .bang,.popBox .lock{display:none}
 .row.dense .ch{font-size:.95cqh;padding:.22cqh .3cqh}
-.popBox li.zoom{display:block;border:0;padding:0}
-.popBox li.zoom::before{display:none}
+.popBox li.extra{color:#ffd2b3}
+.popBox li.extra::before{background:#ff8a3d}
+.popBox li.lev{display:block;font-style:italic;color:var(--mute);border:0}
+.popBox li.lev::before{display:none}
+.popSec{margin:1.4cqh 0 .8cqh;font:700 1.3cqh/1 Barlow,sans-serif;color:var(--mute)}
+#popCard .t{cursor:default}
 .row.dense .lock{left:auto;right:-1cqh;top:-1cqh}
 </style>
 </head>
@@ -190,6 +194,8 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
   <div class="pop" id="pop" hidden role="dialog" aria-modal="true" aria-labelledby="popT">
     <div class="popBox">
       <div class="popHd"><h3 id="popT"></h3><button type="button" class="popX" id="popX">Fechar ✕</button></div>
+      <div id="popCard"></div>
+      <h4 class="popSec">Defeitos</h4>
       <ol id="popL"></ol>
     </div>
   </div>
@@ -257,7 +263,7 @@ footer{position:relative;padding:.9cqh 7.4cqh 1.1cqh 9.4cqh;background:var(--sea
    f: fita da planilha (aba Estágio), 12 letras na ordem das colunas C→N:
       O = OK · N = NOK · G = ONGOING · - = não se aplica · _ = em branco            */
 /* data e hora da última atualização (aparece no rodapé) */
-const ULTIMA_ATUALIZACAO = "26/11/2026 · 08:00";
+const ULTIMA_ATUALIZACAO = "26/11/2026 · 18:40";
 /* defeitos encontrados na máquina 70 (abre no clique em "14 defeitos") */
 const DEFEITOS_70 = [
   "Capô com abertura/gap na guarnição",
@@ -274,6 +280,27 @@ const DEFEITOS_70 = [
   "Paralama LD LE danificado próx. frame",
   "Frame e paralama desalinhados",
   "Porta interfere com filtro de ar"
+];
+/* defeitos em aberto da máquina 84 no início de 27/11: numeração igual à da 70; 15–18 são os 4 a mais (laranja) */
+const DEFEITOS_84 = [
+  {n:1,  t:"Capô com abertura (gap na guarnição)"},
+  {n:2,  t:"Alavanca da VDA interfere com revestimento"},
+  {n:3,  t:"Coluna central LD com abertura"},
+  {n:4,  t:"Forro do teto desalinhado com colunas centrais e traseiras"},
+  {n:5,  t:"Furação telemetria deslocada"},
+  {n:6,  t:"Tampa do rádio com abertura"},
+  {n:7,  t:"Coluna LE com abertura (dianteira próx. porta)"},
+  {n:8,  t:"Coluna central LE com abertura"},
+  {n:9,  t:"Vedação da porta danificada"},
+  {n:10, t:"Infiltração janela traseira"},
+  {n:11, t:"Excesso de cola na fechadura"},
+  {n:12, t:"Paralama LD/LE danificado próx. frame"},
+  {n:13, t:"Frame e paralama desalinhados"},
+  {n:14, t:"Porta interfere com filtro de ar"},
+  {n:15, t:"Complemento paralama LE/LD com abertura", extra:true},
+  {n:16, t:"Revestimento LD com cola", extra:true},
+  {n:17, t:"Lanterna traseira paralama mal ajustada (superior)", extra:true},
+  {n:18, t:"Vazamento mangueira ar condicionado", extra:true}
 ];
 /* Estado-base: fim do dia 24/11 (realizado) */
 const TRATORES = [
@@ -297,7 +324,7 @@ const TRATORES = [
    st: "andamento" | "dorme" | "aguardando" | "bloqueado" | "fim" | "" */
 const ETAPAS = [
   {dia:"24/11", rot:"Realizado", titulo:"24/11 · fim do dia", nota:"realizado", mud:{}},
-  {dia:"26/11", rot:"Hoje", base:0, titulo:"26/11 · hoje", nota:"situação atual", semMv:true, mud:{
+  {dia:"26/11", rot:"Realizado", base:0, titulo:"26/11 · início do dia", nota:"realizado", semMv:true, mud:{
     "70": {ordem:1, lv:7, st:"fim", p:false, defeitos:DEFEITOS_70, f:"OOOOOOOOOOOO"},
     "84": {st:"andamento"},
     "51": {tag:"ajuste porta"},
@@ -307,33 +334,38 @@ const ETAPAS = [
     "17": {ordem:5, prox:"próxima no exp."},
     "33": {ordem:6, prox:"depois da 17"},
     "77": {st:"bloqueado", cadeado:true, txt:null, tag:"vedação porta"}
+  }},  {dia:"27/11", rot:"Início", base:1, titulo:"27/11 · início do dia", nota:"situação atual", semMv:true, mud:{
+    "84": {txt:"Correções em andamento", defeitos:DEFEITOS_84},
+    "73": {st:"andamento", txt:"Em retorno", f:"OOONNOOOONNNO"},
+    "24": {lv:4, st:"andamento", txt:"Em retorno", prox:null, f:"NO_OO-NOONNNO"},
+    "51": {st:"aguardando", tag:null, txt:"Ajustar porta", f:"OOONNNNOONNNN"},
+    "63": {st:"aguardando", tag:null, txt:"Ajustar porta", f:"OOONOOOOONNNN"},
+    "17": {lv:3, st:"andamento", prox:null, tag2:null, f:"NO_OO-NOGNNN"},
+    "74": {prox:"próxima no exp.", foco:null},
+    "33": {prox:"depois da 74"}
   }},
-  {dia:"próximo passo", rot:"Previsto", base:1, titulo:"Próximo passo · previsto", mud:{
-    "73": {ordem:1, lv:5, st:"pronta", f:"OOONNOOOOO_NO"},
-    "24": {ordem:2, lv:4, st:"andamento", prox:"passa à frente", f:"NO_OO-NOOGNNN"},
-    "17": {ordem:3, lv:3, st:"andamento", prox:null, tag2:null, f:"NO_OO-NOGNNN"},
-    "33": {ordem:4, prox:"próxima no exp.", tag2:null}
-  }},
-  {dia:"próximo passo", rot:"Plano B", base:1, plano:true, titulo:"Próximo passo · plano B", nota:"direção do 17 e do 33 não fica pronta a tempo: sobe o 74", mud:{
-    "73": {ordem:1, lv:5, st:"pronta", f:"OOONNOOOOO_NO"},
-    "24": {ordem:2, lv:4, st:"andamento", prox:"passa à frente", f:"NO_OO-NOOGNNN"},
-    "74": {ordem:3, lv:3, st:"andamento", foco:null, f:"OOOOOONOGNNN"},
-    "72": {ordem:4, prox:"próxima no exp."},
-    "17": {prox:null},
-    "33": {prox:null}
+  {dia:"27/11", rot:"Fim do dia", base:2, titulo:"27/11 · fim do dia", nota:"meta", mud:{
+    "84": {ordem:1, lv:7, st:"fim", p:false, txt:null, defeitos:DEFEITOS_70, f:"OOOOOOOOOOOOO"},
+    "73": {ordem:2, lv:6, st:"andamento", txt:null, f:"OOONNOOOOOOGO"},
+    "24": {ordem:3, lv:5, st:"pronta", txt:null, f:"NO_OO-NOOO_NO"},
+    "17": {ordem:4, lv:4.5, st:"pronta", f:"NO_OO-NOO_NNO"},
+    "74": {ordem:5, lv:3, st:"dorme", prox:null, txt:"Dorme no fim de semana", f:"OOOOOONOGNNN"},
+    "72": {ordem:6, prox:"candidata exp. · ou 33"},
+    "33": {ordem:6, prox:"candidata exp. · ou 72"}
   }}
 ];
 const NIVEIS = {
   7:{nm:"Em finalização", subs:[], h:.5},
   6:{nm:"Correção inspeção final", subs:[], h:1.05},
-  5:{nm:"Pronta p/ inspeção final", subs:["Inspeção: 1 por vez · ~½ dia"], h:.5},
-  4:{nm:"Retorno", subs:["Validação hídrico"], h:1.05},
-  3:{nm:"Retrabalho experimental", subs:["Rolete do capô","Reparo hídrico"], cap:1, h:1.15},
+  5:{nm:"Pronta p/ inspeção final", subs:[], vazio:"vazio · inspeção 1 por vez, ~½ dia", h:.5},
+  4.5:{nm:"Pronto p/ teste hídrico", subs:[], h:.5},
+  4:{nm:"Retorno", subs:["Ajuste porta"], h:1.05},
+  3:{nm:"Retrabalho experimental", subs:[], cap:1, h:1.15},
   2:{nm:"Retrabalho condicional", subs:["Farol","Inversão rodado","Defletor","Pintura"], h:3.7},
   1:{nm:"Pátio", subs:["Roll test","Keeper","Correções Keeper"], h:2}
 };
 /* nome e nível de cada coluna da planilha (C→N) */
-const COLS = [["Roll test",1],["Keeper",1],["Corr. Keeper",1],["Farol",2],["Rodado",2],["Defletor",2],["Pintura",2],["Rolete capô",3],["Eng. exp",3],["Validação hídrico",4],["Inspeção final",5],["Correção IF",6],["Ajuste porta",4]];
+const COLS = [["Roll test",1],["Keeper",1],["Corr. Keeper",1],["Farol",2],["Rodado",2],["Defletor",2],["Pintura",2],["Rolete capô",3],["Eng. exp",3],["Validação hídrico",4.5],["Inspeção final",5],["Correção IF",6],["Ajuste porta",4]];
 /* ===================================================================================== */
 
 const esc = s => String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
@@ -371,32 +403,34 @@ const ler = t => {
 
 const linhaStatus = (t, r) => {
   if (t.st === "bloqueado") return `<span class="st blk">Bloqueado${t.tag ? " · " + esc(t.tag) : ""}</span>`;
-  if (t.st === "fim") return `<span class="st ok">Em finalização${t.defeitos ? ` · <button type="button" class="defbtn" data-n="${esc(t.n)}">${t.defeitos.length} defeitos</button>` : ""}</span>`;
-  if (t.st === "pronta") return `<span class="st ok">✓ Pronta p/ inspeção final</span>`;
+  if (t.st === "fim") return `<span class="st ok">Em finalização${t.defeitos ? ` · <button type="button" class="defbtn">${t.defeitos.length} defeitos</button>` : ""}</span>`;
+  if (t.st === "pronta") return `<span class="st ok">✓ ${esc(NIVEIS[t.lv].nm)}</span>`;
   if (t.st === "candidata") return `<span class="st cand">Sobe quem fechar porta + hídrico</span>`;
   if (t.st === "andamento") return `<span class="st go">${esc(t.txt || r.emCurso.join(", ") || "Em andamento")}</span>`;
-  if (t.st === "dorme") return `<span class="st sleep">Dorme em ${esc(r.emCurso.join(", ") || "posto")}</span>`;
-  if (t.st === "aguardando") return `<span class="st wait">Aguardando ${esc((r.espera || "vaga").replace("Validação hídrico", "hídrico"))}</span>`;
+  if (t.st === "dorme") return `<span class="st sleep">${t.txt ? esc(t.txt) : `Dorme em ${esc(r.emCurso.join(", ") || "posto")}`}</span>`;
+  if (t.st === "aguardando") return t.txt ? `<span class="st wait">${esc(t.txt)}</span>` : `<span class="st wait">Aguardando ${esc((r.espera || "vaga").replace("Validação hídrico", "hídrico").toLowerCase())}</span>`;
   return "";
 };
 
 const card = t => {
   const r = ler(t);
   const b = [];
-  if (t.mv && t.st !== "fim") b.push(`<span class="badge mv">${t.mv < t.lv ? "↑" : "↓"} veio do nível ${t.mv}</span>`);
+  if (t.mv && t.st !== "fim") b.push(`<span class="badge mv">${t.mv < t.lv ? "↑" : "↓"} de N${t.mv}</span>`);
   if (t.prox) b.push(`<span class="badge nx">${esc(t.prox)}</span>`);
   if (t.foco) b.push(`<span class="badge">${esc(t.foco)}</span>`);
-  if (t.doa) b.push('<span class="badge dn">doadora de peças</span>');
+  if (t.doa) b.push('<span class="badge dn">doadora</span>');
   if (t.tag && t.st !== "bloqueado") b.push(`<span class="badge ${t.c === "y" ? "y" : ""}">${esc(t.tag)}</span>`);
   if (t.tag2) b.push(`<span class="badge">${esc(t.tag2)}</span>`);
+  const defb = t.defeitos && t.st !== "fim" ? `<span class="st"><button type="button" class="defbtn">${t.defeitos.length} defeitos</button></span>` : "";
   const chips = t.st === "fim" ? "" : r.falta.length
     ? `<div class="chips">${r.falta.map(n => `<span class="ch">${esc(n)}</span>`).join("")}</div>`
-    : `<span class="st ok">Correções em andamento</span>`;
+    : "";
   return `<div class="t ${esc(t.st || "")} ${t.p ? "pri" : ""}" data-id="${esc(t.n)}">
     ${tractorSVG(t.c)}
     <div class="tx">
       <div class="hd"><b>${esc(t.n)}</b>${b.join("")}</div>
       ${linhaStatus(t, r)}
+      ${defb}
       ${chips}
     </div>
     ${t.p ? '<span class="bang" title="Prioridade">!</span>' : ""}
@@ -419,7 +453,7 @@ const dados = k => {
 };
 
 /* contorno do iceberg: largura (% da coluna) em cada fronteira, do topo do nível 6 à base do nível 1 */
-const W = [46, 60, 70, 88, 97, 99, 88];
+const W = [46, 60, 70, 80, 88, 97, 99, 88];
 let seed;
 const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
 const poly = i => {
@@ -434,7 +468,7 @@ const poly = i => {
   return `polygon(${R.join(",")},${L.reverse().join(",")})`;
 };
 
-const ordem = [7, 6, 5, 4, 3, 2, 1];
+const ordem = [7, 6, 5, 4.5, 4, 3, 2, 1];
 const stage = document.getElementById("stage");
 const tv = document.querySelector(".tv");
 stage.style.gridTemplateRows = ordem.map(lv => `${NIVEIS[lv].h}fr`).join(" ");
@@ -444,9 +478,9 @@ const WAVE = `<svg class="wl" viewBox="0 0 400 14" preserveAspectRatio="none" ar
 const setWL = () => { const rows = stage.querySelectorAll(".row"); if (rows.length < 3) return;
   tv.style.setProperty("--wl", (rows[3].offsetTop / stage.clientHeight * 100).toFixed(2) + "%"); };
 
-let modo = 1;
+let modo = 2;
 /* abre em "hoje"; botão de cima: hoje → próximo passo → volta para hoje; 24/11 e plano B pela linha do tempo */
-const proxima = k => k === 1 ? 2 : 1;
+const proxima = k => k === 2 ? 3 : 2;
 const render = () => {
   seed = 11;
   const lista = dados(modo);
@@ -457,7 +491,7 @@ const render = () => {
     const tag = N.cap
       ? `<span class="tag ${ocup >= N.cap ? "cap" : ""}">1 por vez · ${ocup}/${N.cap}</span>`
       : "";
-    return `<section data-lv="${lv}" class="row ${aqui.length >= 3 ? "dense " : ""}${lv === 7 ? "sky" : lv >= 5 ? "up" : "dn"}">
+    return `<section data-lv="${lv}" class="row dense ${lv === 7 ? "sky" : lv >= 5 ? "up" : "dn"}">
       <div class="lab">
         <span class="lv">Nível ${lv}</span>
         <span class="nm">${esc(N.nm)}</span>
@@ -466,7 +500,7 @@ const render = () => {
       </div>
       <div class="slot">
         ${lv === 7 ? "" : `<div class="ice" style="clip-path:${poly(i - 1)}"></div>`}
-        <div class="trs">${aqui.length ? aqui.map((t, j) => (j && t.st === "candidata" && aqui[j - 1].st === "candidata" ? '<span class="ou">OU</span>' : "") + card(t)).join("") : '<span class="empty">sem tratores</span>'}</div>
+        <div class="trs">${aqui.length ? aqui.map((t, j) => (j && t.st === "candidata" && aqui[j - 1].st === "candidata" ? '<span class="ou">OU</span>' : "") + card(t)).join("") : `<span class="empty">${esc(N.vazio || "sem tratores")}</span>`}</div>
       </div>
     </section>`;
   }).join("") + WAVE;
@@ -480,8 +514,8 @@ const render = () => {
   document.getElementById("mode").innerHTML = `<b>${esc(E.titulo)}</b> · ${E.nota ? esc(E.nota) : `${nMov} movimentos`}`;
   const go = document.getElementById("go");
   const prox = proxima(modo);
-  go.textContent = modo >= 2 ? "↺ Voltar para hoje" : `▶ Ver ${ETAPAS[prox].dia}`;
-  go.classList.toggle("back", modo >= 2);
+  go.textContent = modo === 3 ? "↺ Voltar ao início do dia" : prox === 3 ? "▶ Ver fim do dia 27/11" : "▶ Ver 27/11";
+  go.classList.toggle("back", modo === 3);
   document.querySelector(".tv").classList.toggle("planoB", !!E.plano);
   document.querySelectorAll(".tl button").forEach(bt => {
     bt.classList.toggle("on", +bt.dataset.k === modo);
@@ -511,7 +545,7 @@ const trocar = alvo => {
     if (Math.abs(dx) + Math.abs(dy) < 2) return;
     const m = frente ? ETAPAS[alvo].mud[el.dataset.id] : null;
     const principal = m && m.lv;
-    const delay = principal ? (m.ordem - 1) * passo : 0;
+    const delay = principal ? ((m.ordem || 1) - 1) * passo : 0;
     const dur = principal ? 1300 : 700;
     fim = Math.max(fim, delay + dur);
     el.classList.add("fly");
@@ -543,19 +577,19 @@ document.getElementById("tlBtn").addEventListener("click", e => {
 });
 const pop = document.getElementById("pop");
 const fecharPop = () => { pop.hidden = true; };
+const listaDef = t => (t.defeitos || []).map((d, i) => typeof d === "string" ? {n: i + 1, t: d} : d).sort((a, b) => a.n - b.n);
 stage.addEventListener("click", e => {
-  const bt = e.target.closest(".defbtn");
-  if (!bt) {
-    const c = e.target.closest(".t"); if (!c) return;
-    const t = dados(modo).find(x => x.n === c.dataset.id); if (!t) return;
-    document.getElementById("popT").innerHTML = `Máquina ${esc(t.n)}<small>${esc(NIVEIS[t.lv].nm)} · nível ${t.lv}</small>`;
-    document.getElementById("popL").innerHTML = `<li class="zoom">${card(t)}</li>`;
-    pop.hidden = false; document.getElementById("popX").focus();
-    return;
-  }
-  const t = dados(modo).find(x => x.n === bt.dataset.n); if (!t || !t.defeitos) return;
-  document.getElementById("popT").innerHTML = `Máquina ${esc(t.n)} · ${t.defeitos.length} defeitos sem solução<small>Pendentes na finalização</small>`;
-  document.getElementById("popL").innerHTML = t.defeitos.map(d => `<li>${esc(d)}</li>`).join("");
+  const c = e.target.closest(".t"); if (!c) return;
+  const t = dados(modo).find(x => x.n === c.dataset.id); if (!t) return;
+  const L = listaDef(t), nx = L.filter(d => d.extra).length;
+  let tit = `Máquina ${esc(t.n)}`, sub = `${esc(NIVEIS[t.lv].nm)} · nível ${t.lv}`;
+  if (L.length && t.st === "fim") { tit += ` · ${L.length} defeitos sem solução`; sub = "Pendentes na finalização"; }
+  else if (L.length) { tit += ` · ${L.length} defeitos em aberto`; sub = nx ? `Numeração igual à da 70 · em laranja, os ${nx} a mais que os 14 da 70` : sub; }
+  document.getElementById("popT").innerHTML = `${tit}<small>${sub}</small>`;
+  document.getElementById("popCard").innerHTML = card(t);
+  document.getElementById("popL").innerHTML = L.length
+    ? L.map(d => `<li data-n="${d.n}" class="${d.extra ? "extra" : ""}">${esc(d.t)}</li>`).join("")
+    : '<li class="lev">Defeitos em levantamento - M.Jeronimo</li>';
   pop.hidden = false; document.getElementById("popX").focus();
 });
 document.getElementById("popX").addEventListener("click", fecharPop);
